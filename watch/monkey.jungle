@@ -1,0 +1,4 @@
+project.manifest = manifest.xml
+base.sourcePath = source
+base.resourcePath = resources
+# resources-venu441mm/ is picked up automatically: the 41mm wants a 54x54 icon.

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<settings>
+    <setting propertyKey="@Properties.relayHost" title="@Strings.SettingRelayHost">
+        <settingConfig type="alphaNumeric" maxLength="128" />
+    </setting>
+    <setting propertyKey="@Properties.token" title="@Strings.SettingToken">
+        <settingConfig type="alphaNumeric" maxLength="64" />
+    </setting>
+</settings>

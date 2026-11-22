@@ -1,0 +1,16 @@
+# Secrets. Real values live in ~/.claude/token-glance/env, outside the repo.
+.env
+env
+developer_key
+*.der
+*.pem
+watch/resources/properties/properties.xml
+
+# Build output
+node_modules/
+watch/bin/
+*.prg
+*.prg.debug.xml
+*.iq
+
+.DS_Store

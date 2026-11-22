@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<strings>
+    <string id="AppName">Claude Usage</string>
+    <string id="SettingRelayHost" scope="settings">Relay host</string>
+    <string id="SettingToken" scope="settings">Relay token</string>
+</strings>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!-- Copy to properties.xml (gitignored) and fill in. relayHost is a bare host, no https://. -->
+<properties>
+    <property id="relayHost" type="string"></property>
+    <property id="token" type="string"></property>
+</properties>
