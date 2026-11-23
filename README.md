@@ -16,20 +16,48 @@ sideloaded, for personal use.
 
 ## How it works
 
+### Components
+
 ```mermaid
 flowchart LR
-    sched["Cloud Scheduler<br/>every 10 min"] -- "POST /poll<br/>Bearer TOKEN" --> relay
+    you(["👤 You"]) --> watch["⌚ Garmin watch"] --> relay
     subgraph gcp["Google Cloud"]
-        relay["relay<br/>Cloud Function"]
-        secret[("Secret Manager<br/>claude-token")]
-        bucket[("Storage bucket<br/>usage/&lt;sha256(TOKEN)&gt;.json")]
+        relay["Relay function"]
+        relay <--> bucket[("Storage bucket")]
+        sched["Scheduler"] --> relay
     end
-    secret -. CLAUDE_CODE_OAUTH_TOKEN .-> relay
-    relay -- "1 tiny Haiku turn<br/>(Agent SDK)" --> claude["Anthropic API"]
-    claude -- "rate_limit_event<br/>5h + 7d utilization" --> relay
-    relay <-- "read / write" --> bucket
-    watch["Garmin watch<br/>background, every 5 min"] -- "GET /usage<br/>Bearer TOKEN" --> relay
-    relay -- "{h5, r5, d7, r7, ts}" --> watch
+    relay --> claude["Claude"]
+
+    classDef accent fill:#D97757,stroke:#B85C3E,color:#fff
+    class relay accent
+    style gcp fill:none,stroke:#888,stroke-dasharray:4
+```
+
+### Flow
+
+```mermaid
+sequenceDiagram
+    actor You
+    participant Watch as Garmin watch
+    participant Relay
+    participant Claude
+
+    loop Every 10 minutes
+        Note over Relay: Scheduler calls POST /poll
+        Relay->>Claude: One tiny Haiku turn
+        Claude-->>Relay: 5h and 7d usage
+        Note over Relay: Save to bucket
+    end
+
+    loop Every 5 minutes
+        Watch->>Relay: GET /usage
+        Note over Relay: Read from bucket
+        Relay-->>Watch: Latest usage
+        Note over Watch: Store snapshot
+    end
+
+    You->>Watch: Look at the glance
+    Watch-->>You: Usage, time to reset, pace
 ```
 
 1. Cloud Scheduler calls the relay's `/poll` every 10 minutes.
