@@ -18,8 +18,8 @@ a billing account is still required.
 ## 0. Prerequisites
 
 - A Claude Pro or Max subscription.
-- A Garmin watch with Connect IQ glances. The app targets `venu441mm` and
-  `venu445mm`; for another model see step 7.
+- A Garmin watch with Connect IQ glances. The app targets `venu441mm`,
+  `venu445mm` and `instinct3solar45mm`; for another model see step 7.
 - macOS, Linux or Windows (WSL) with:
   - [Claude Code](https://docs.claude.com/en/docs/claude-code) (`claude`)
   - [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) (`gcloud`)
@@ -209,8 +209,8 @@ committed template.
 SDK Manager writes on macOS. On Linux, edit the `SDK=` line to point at your
 SDK folder.
 
-Expected: `watch/bin/claude-usage-venu441mm.prg` and
-`watch/bin/claude-usage-venu445mm.prg`.
+Expected: `watch/bin/claude-usage-<device>.prg` for `venu441mm`, `venu445mm`
+and `instinct3solar45mm`.
 
 Optional, in the simulator: start it from the SDK Manager, then
 `./watch/build.sh run venu445mm`. Use **Settings > Glance Launch Mode >

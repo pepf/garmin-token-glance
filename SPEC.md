@@ -90,14 +90,19 @@ one works. The old dev token was written to access logs and must not be reused.
 
 ## 3. Watch app: `watch/`
 
-Monkey C, type `watch-app`, products `venu441mm` and `venu445mm`, permissions
-`Communications` and `Background`. Four source files.
+Monkey C, type `watch-app`, products `venu441mm`, `venu445mm` and
+`instinct3solar45mm`, permissions `Communications` and `Background`.
+
+The Instinct 3 Solar is 1-bit, 176x176, with a round subscreen over the top
+right. Code that differs there is annotated `(:mono)`, the rest `(:color)`;
+`monkey.jungle` excludes one of the two per device.
 
 | File | Job |
 |---|---|
 | `App.mc` | Registers the 5-minute temporal event, returns the views, saves background data to `Storage["snap"]`. |
 | `Fetch.mc` | Background delegate. One `makeWebRequest`, one `Background.exit()` with the payload, on every path. |
 | `GlanceView.mc` | Draws the glance from `Storage["snap"]`. |
+| `GlanceViewMono.mc` | The same glance for the Instinct, kept left of the subscreen. |
 | `DetailView.mc` | Draws the detail page from `Storage["snap"]`. |
 
 Settings: `relayHost` and `token`, as app properties editable in Garmin

@@ -4,7 +4,8 @@ A Garmin glance that shows how much of your Claude subscription limits you have
 used: the 5-hour and 7-day percentage, time until reset, and a pace tick that
 tells you whether you are burning faster than the window allows.
 
-Built for a Venu 4 (41 mm and 45 mm), sideloaded, for personal use.
+Built for a Venu 4 (41 mm and 45 mm) and an Instinct 3 Solar (45 mm and 50 mm),
+sideloaded, for personal use.
 
 ```
  Claude                    7d 78%
@@ -70,8 +71,9 @@ This is a personal build, not a Connect IQ Store app. Settings in Garmin
 Connect are not available for sideloaded apps, so the relay host and token are
 compiled in from `watch/resources/properties/properties.xml` (gitignored).
 
-1. Build: `./watch/build.sh` produces `watch/bin/claude-usage-venu441mm.prg`
-   and `claude-usage-venu445mm.prg`. Pick the one for your watch size.
+1. Build: `./watch/build.sh` produces `watch/bin/claude-usage-<device>.prg` for
+   `venu441mm`, `venu445mm` and `instinct3solar45mm` (also the 50 mm). Pick the
+   one for your watch.
 2. Connect the watch to your computer with its USB cable.
    - macOS: Garmin watches use MTP, so they do not show up in Finder. Use
      [OpenMTP](https://openmtp.ganeshrvel.com/) (free) to browse the watch.

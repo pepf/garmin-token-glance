@@ -59,6 +59,7 @@ module Usage {
 
     //! Rounded bar with a pace tick at the elapsed fraction of the window.
     //! Fill past the tick means usage is running ahead of time.
+    (:color)
     function drawBar(dc as Graphics.Dc, x as Number, y as Number, w as Number, h as Number,
                      pct as Number or Null, left as Number or Null, window as Number) as Void {
         var r = h / 2;
@@ -91,6 +92,26 @@ module Usage {
             var tx = x + w * (window - left) / window;
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             dc.fillRectangle(tx - 1, y - 3, 3, h + 6);
+        }
+    }
+
+    //! 1-bit version: hairline track, solid fill, and a black gap around the
+    //! tick so it stays visible on top of the fill.
+    (:mono)
+    function drawBar(dc as Graphics.Dc, x as Number, y as Number, w as Number, h as Number,
+                     pct as Number or Null, left as Number or Null, window as Number) as Void {
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.fillRectangle(x, y + h / 2, w, 1);
+        if (pct != null) {
+            dc.fillRectangle(x, y, w * pct / 100, h);
+        }
+
+        if (left != null && left <= window) {
+            var tx = x + (w - 2) * (window - left) / window;
+            dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+            dc.fillRectangle(tx - 2, y - 2, 6, h + 4);
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+            dc.fillRectangle(tx, y - 2, 2, h + 4);
         }
     }
 }

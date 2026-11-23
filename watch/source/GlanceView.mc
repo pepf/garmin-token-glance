@@ -4,7 +4,7 @@ import Toybox.WatchUi;
 
 //! Title row, 5-hour value row, then a 5-hour and a thinner 7-day bar.
 //! Drawn from the stored snapshot only: no network, timers or animation.
-(:glance)
+(:glance, :color)
 class GlanceView extends WatchUi.GlanceView {
 
     function initialize() {

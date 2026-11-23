@@ -4,6 +4,7 @@
         launcherIcon="@Drawables.LauncherIcon" minApiLevel="4.0.0">
         <!-- Venu 4 is two device ids, not "venu4". -->
         <iq:products>
+            <iq:product id="instinct3solar45mm"/>
             <iq:product id="venu441mm"/>
             <iq:product id="venu445mm"/>
         </iq:products>

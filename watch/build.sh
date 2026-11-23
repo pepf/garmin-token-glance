@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Usage: ./build.sh        build both Venu 4 sizes
+# Usage: ./build.sh        build all devices
 #        ./build.sh run [device]   build one and launch it in the running simulator
 set -euo pipefail
 SDK="$(tr -d '\n' < "$HOME/Library/Application Support/Garmin/ConnectIQ/current-sdk.cfg")"
@@ -13,5 +13,5 @@ if [[ "${1:-}" == run ]]; then
     build "$d"
     "$SDK/bin/monkeydo" "bin/claude-usage-$d.prg" "$d"
 else
-    for d in venu445mm venu441mm; do echo "=== $d"; build "$d"; done
+    for d in venu445mm venu441mm instinct3solar45mm; do echo "=== $d"; build "$d"; done
 fi

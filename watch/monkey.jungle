@@ -1,4 +1,7 @@
 project.manifest = manifest.xml
 base.sourcePath = source
 base.resourcePath = resources
-# resources-venu441mm/ is picked up automatically: the 41mm wants a 54x54 icon.
+# Instinct Solar: 1-bit screen with a round subscreen. Anything else is colour.
+base.excludeAnnotations = mono
+semioctagon.excludeAnnotations = color
+# resources-<device>/ is picked up automatically: icons differ in size and colour.
