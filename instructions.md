@@ -12,8 +12,8 @@ first for how the pieces fit together.
 > **(you)** need the person at the keyboard: a browser sign-in, a payment
 > method, or the physical watch.
 
-Time: about 45 minutes. Cost: the Google Cloud free tier covers this usage;
-a billing account is still required.
+Time: about 45 minutes. Cost: cents per month; a billing account is
+required.
 
 ## 0. Prerequisites
 
@@ -55,8 +55,8 @@ unset t
 claude setup-token
 ```
 
-Fill `GCP_ACCOUNT` (your Google account email) now. `GCP_PROJECT` and
-`GCP_SERVICE_ACCOUNT` are set in step 2.
+Fill `GCP_ACCOUNT` (your Google account email) now. `GCP_PROJECT`,
+`GCP_SERVICE_ACCOUNT` and `GCP_BUCKET` are set in step 2.
 
 Expected: `grep -c '=.\+' ~/.claude/token-glance/env` counts at least 3
 filled lines.
@@ -79,9 +79,9 @@ gcloud billing projects link "$PROJECT" --billing-account=<ACCOUNT_ID>
 export CLOUDSDK_CORE_PROJECT="$PROJECT"
 ```
 
-Write `GCP_PROJECT=$PROJECT` and
-`GCP_SERVICE_ACCOUNT=usage-relay@$PROJECT.iam.gserviceaccount.com` into the
-env file.
+Write the values of `GCP_PROJECT=$PROJECT`,
+`GCP_SERVICE_ACCOUNT=usage-relay@$PROJECT.iam.gserviceaccount.com` and
+`GCP_BUCKET=$PROJECT-usage` into the env file, then `source` it again.
 
 Keep `CLOUDSDK_CORE_ACCOUNT` and `CLOUDSDK_CORE_PROJECT` exported for every
 command below, so gcloud never targets a different default account.
@@ -91,26 +91,24 @@ Enable the APIs:
 ```bash
 gcloud services enable cloudfunctions.googleapis.com run.googleapis.com \
   cloudbuild.googleapis.com artifactregistry.googleapis.com \
-  firestore.googleapis.com secretmanager.googleapis.com \
+  storage.googleapis.com secretmanager.googleapis.com \
   cloudscheduler.googleapis.com
 ```
 
-### Firestore
+### Service account and bucket
 
-The relay expects a named database called `token-glance`:
-
-```bash
-gcloud firestore databases create --database=token-glance \
-  --location=europe-west4 --type=firestore-native
-```
-
-### Service account
+The relay keeps its one JSON file in a private bucket. Soft delete is off, so
+the overwrite every 10 minutes does not pile up old copies. The role is
+`objectUser` because overwriting needs delete permission, and a missing file
+only reads as 404 (rather than 403) with list permission.
 
 ```bash
 gcloud iam service-accounts create usage-relay --display-name="Token Glance relay"
 SA="usage-relay@$PROJECT.iam.gserviceaccount.com"
-gcloud projects add-iam-policy-binding "$PROJECT" \
-  --member="serviceAccount:$SA" --role=roles/datastore.user --condition=None
+gcloud storage buckets create "gs://$GCP_BUCKET" --location=europe-west4 \
+  --uniform-bucket-level-access --public-access-prevention --soft-delete-duration=0
+gcloud storage buckets add-iam-policy-binding "gs://$GCP_BUCKET" \
+  --member="serviceAccount:$SA" --role=roles/storage.objectUser
 ```
 
 ### Claude token in Secret Manager
@@ -179,6 +177,7 @@ cd watch
 openssl genrsa -out developer_key.pem 4096
 openssl pkcs8 -topk8 -inform PEM -outform DER -in developer_key.pem -out developer_key -nocrypt
 rm developer_key.pem
+cd ..
 ```
 
 `watch/developer_key` is gitignored.
@@ -191,6 +190,7 @@ and token are compiled in:
 ```bash
 source ~/.claude/token-glance/env
 host=${RELAY_URL#https://}; host=${host%/}
+mkdir -p watch/resources/properties
 cat > watch/resources/properties/properties.xml <<EOF
 <?xml version="1.0"?>
 <properties>

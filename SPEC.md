@@ -21,7 +21,7 @@ and starts from the data source.
 ## How it works
 
 ```
-Cloud Scheduler ──POST /poll──▶ relay (1 function, 1 doc) ──GET /usage──▶ watch
+Cloud Scheduler ──POST /poll──▶ relay (1 function, 1 file) ──GET /usage──▶ watch
  (every 10 min)        │                                        (every 5 min)
                        └─ one minimal Claude Code turn via the Agent SDK
 ```
@@ -73,15 +73,15 @@ the Agent SDK starts the Claude Code binary.
 
 | Request | Behaviour |
 |---|---|
-| `POST /poll` | Check bearer token. Read the limits (section 1), add `ts`, write to Firestore doc `usage/<sha256(token)>`. |
-| `GET /usage` | Check bearer token. Return the doc, or `204` if none. `Cache-Control: no-store`. |
+| `POST /poll` | Check bearer token. Read the limits (section 1), add `ts`, write to bucket object `usage/<sha256(token)>.json`. |
+| `GET /usage` | Check bearer token. Return the object, or `204` if none. `Cache-Control: no-store`. |
 
 - Auth is `Authorization: Bearer <token>`, compared against a single `TOKEN`
   env var. Never a query parameter: Cloud Run access logs record full URLs.
   The scheduler job sends the same header.
 - The token is 26 characters of `[a-z2-7]`, generated locally. That alphabet is
   the only one the Garmin Connect settings keyboard can type.
-- Uses the existing named Firestore database `token-glance`.
+- One private Cloud Storage bucket, named by the `BUCKET` env var.
 - Deploy with `relay/deploy.sh`, which pins the personal GCP account and
   project and hides gcloud output that would echo the token.
 
@@ -186,7 +186,7 @@ Each step ends in something I can see working.
 
 1. **Prove the data.** Done, see below.
 2. **Relay.** Deploy, then PUT and GET with `curl`.
-3. **Poller.** Create the scheduler job, watch the relay doc change.
+3. **Poller.** Create the scheduler job, watch the stored object change.
 4. **Glance.** Simulator first, both sizes, then sideload to the watch.
 5. **Detail page.**
 6. **Clean up** the old relay service and Firestore data.

@@ -22,12 +22,12 @@ flowchart LR
     subgraph gcp["Google Cloud"]
         relay["relay<br/>Cloud Function"]
         secret[("Secret Manager<br/>claude-token")]
-        fs[("Firestore<br/>usage/&lt;sha256(TOKEN)&gt;")]
+        bucket[("Storage bucket<br/>usage/&lt;sha256(TOKEN)&gt;.json")]
     end
     secret -. CLAUDE_CODE_OAUTH_TOKEN .-> relay
     relay -- "1 tiny Haiku turn<br/>(Agent SDK)" --> claude["Anthropic API"]
     claude -- "rate_limit_event<br/>5h + 7d utilization" --> relay
-    relay -- write --> fs
+    relay <-- "read / write" --> bucket
     watch["Garmin watch<br/>background, every 5 min"] -- "GET /usage<br/>Bearer TOKEN" --> relay
     relay -- "{h5, r5, d7, r7, ts}" --> watch
 ```
@@ -35,7 +35,8 @@ flowchart LR
 1. Cloud Scheduler calls the relay's `/poll` every 10 minutes.
 2. The relay runs one minimal Claude Code turn with your `claude setup-token`
    token. The response stream includes a `rate_limit_event` carrying your
-   account-wide 5-hour and 7-day usage. It stores the numbers in Firestore.
+   account-wide 5-hour and 7-day usage. It stores the numbers as one small
+   JSON file in a private bucket.
 3. The watch fetches `/usage` in the background every 5 minutes (through the
    phone's Garmin Connect app) and draws the glance from the stored snapshot.
    Countdowns and the pace tick are computed on the watch, so they stay right

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Deploys the relay. Account, project and token come from ~/.claude/token-glance/env
+# Deploys the relay. Account, project, bucket and token come from ~/.claude/token-glance/env
 # and are pinned here, so the gcloud default account can never be the target.
 # --format=none on deploy: gcloud otherwise prints the TOKEN env var.
 set -euo pipefail
@@ -9,6 +9,7 @@ source ~/.claude/token-glance/env
 : "${GCP_ACCOUNT:?GCP_ACCOUNT missing from ~/.claude/token-glance/env}"
 : "${GCP_PROJECT:?GCP_PROJECT missing from ~/.claude/token-glance/env}"
 : "${GCP_SERVICE_ACCOUNT:?GCP_SERVICE_ACCOUNT missing from ~/.claude/token-glance/env}"
+: "${GCP_BUCKET:?GCP_BUCKET missing from ~/.claude/token-glance/env}"
 export CLOUDSDK_CORE_ACCOUNT="$GCP_ACCOUNT"
 export CLOUDSDK_CORE_PROJECT="$GCP_PROJECT"
 REGION=europe-west4
@@ -17,7 +18,7 @@ NAME=usage-relay
 cd "$(dirname "$0")"
 envfile=$(mktemp)
 trap 'rm -f "$envfile"' EXIT
-printf 'TOKEN: "%s"\nFIRESTORE_DATABASE: token-glance\n' "$TOKEN" > "$envfile"
+printf 'TOKEN: "%s"\nBUCKET: "%s"\n' "$TOKEN" "$GCP_BUCKET" > "$envfile"
 
 gcloud functions deploy "$NAME" \
   --gen2 --region="$REGION" --runtime=nodejs22 --source=. --entry-point=relay \

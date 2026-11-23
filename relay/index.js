@@ -1,10 +1,11 @@
 const crypto = require('crypto');
 const functions = require('@google-cloud/functions-framework');
-const { Firestore } = require('@google-cloud/firestore');
+const { Storage } = require('@google-cloud/storage');
 
 if (!process.env.TOKEN) throw new Error('TOKEN env var is required');
+if (!process.env.BUCKET) throw new Error('BUCKET env var is required');
 
-const db = new Firestore({ databaseId: process.env.FIRESTORE_DATABASE });
+const bucket = new Storage().bucket(process.env.BUCKET);
 const sha = (s) => crypto.createHash('sha256').update(s).digest();
 const expected = sha(process.env.TOKEN);
 
@@ -51,21 +52,26 @@ functions.http('relay', async (req, res) => {
   if (!crypto.timingSafeEqual(hash, expected)) return res.status(401).end();
 
   // Keyed by token hash so adding users later only changes the check above.
-  const doc = db.doc(`usage/${hash.toString('hex')}`);
+  const file = bucket.file(`usage/${hash.toString('hex')}.json`);
 
   // Called by Cloud Scheduler.
   if (req.path === '/poll' && req.method === 'POST') {
     const out = await readLimits();
     out.ts = Math.floor(Date.now() / 1000);
-    await doc.set(out);
+    await file.save(JSON.stringify(out), { contentType: 'application/json', resumable: false });
     return res.status(204).end();
   }
 
   if (req.path === '/usage' && req.method === 'GET') {
-    const snap = await doc.get();
     res.set('Cache-Control', 'no-store');
-    if (!snap.exists) return res.status(204).end();
-    return res.json(snap.data());
+    let body;
+    try {
+      [body] = await file.download();
+    } catch (err) {
+      if (err.code === 404) return res.status(204).end(); // nothing polled yet
+      throw err;
+    }
+    return res.type('json').send(body.toString());
   }
 
   res.status(405).end();
