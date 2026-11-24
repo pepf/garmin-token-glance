@@ -7,12 +7,7 @@ tells you whether you are burning faster than the window allows.
 Built for a Venu 4 (41 mm and 45 mm) and an Instinct 3 Solar (45 mm and 50 mm),
 sideloaded, for personal use.
 
-```
- Claude                    7d 78%
- 42%   2h 10m
- ━━━━━━━━━━━━│───────────────────     5h bar, │ = pace
- ━━━━━━━━━━━━━━━━━━━━━━━━│───────     7d bar
-```
+<img width="1000" alt="Garmin Token Glance Screenshots" src="https://github.com/user-attachments/assets/978e4981-b348-4916-a8fe-3265048450ce" />
 
 ## How it works
 
