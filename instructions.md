@@ -18,8 +18,8 @@ required.
 ## 0. Prerequisites
 
 - A Claude Pro or Max subscription.
-- A Garmin watch with Connect IQ glances. The app targets `venu441mm`,
-  `venu445mm` and `instinct3solar45mm`; for another model see step 7.
+- A Garmin watch with Connect IQ glances. The supported ones are
+  listed in the [README](README.md#supported-models); for another see step 7.
 - macOS, Linux or Windows (WSL) with:
   - [Claude Code](https://docs.claude.com/en/docs/claude-code) (`claude`)
   - [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) (`gcloud`)
@@ -209,8 +209,9 @@ committed template.
 SDK Manager writes on macOS. On Linux, edit the `SDK=` line to point at your
 SDK folder.
 
-Expected: `watch/bin/claude-usage-<device>.prg` for `venu441mm`, `venu445mm`
-and `instinct3solar45mm`.
+Expected: `watch/bin/claude-usage-<device>.prg` for every device in the
+[README](README.md#supported-models). `build.sh` needs the device files for all
+of them.
 
 Optional, in the simulator: start it from the SDK Manager, then
 `./watch/build.sh run venu445mm`. Use **Settings > Glance Launch Mode >
@@ -223,7 +224,8 @@ Add your device id to `<iq:products>` in `watch/manifest.xml` and to the loop
 in `watch/build.sh`. Device ids are the folder names under the SDK's
 `Devices/` directory. The device must support glances and API level 4.0+.
 Check the launcher icon size the device wants (see `resources-venu441mm/` for
-an override example).
+an override example). Colour screens count as AMOLED; for a 64-colour screen
+other than 260x260 or 280x280, add its family to `monkey.jungle` too.
 
 ## 8. Sideload to the watch (you)
 

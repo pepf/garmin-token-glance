@@ -13,5 +13,5 @@ if [[ "${1:-}" == run ]]; then
     build "$d"
     "$SDK/bin/monkeydo" "bin/claude-usage-$d.prg" "$d"
 else
-    for d in venu445mm venu441mm instinct3solar45mm; do echo "=== $d"; build "$d"; done
+    for d in venu445mm venu441mm instinct3solar45mm fenix843mm fenix847mm fenix8pro47mm fenix8solar47mm fenix8solar51mm fenix943mm fenix947mm fenix9pro43mm fenix9pro47mm fenix9pro51mm fenix9prosolar47mm fenix9prosolar51mm; do echo "=== $d"; build "$d"; done
 fi

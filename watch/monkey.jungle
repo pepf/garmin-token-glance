@@ -1,7 +1,13 @@
 project.manifest = manifest.xml
 base.sourcePath = source
 base.resourcePath = resources
-# Instinct Solar: 1-bit screen with a round subscreen. Anything else is colour.
-base.excludeAnnotations = mono
-semioctagon.excludeAnnotations = color
-# resources-<device>/ is picked up automatically: icons differ in size and colour.
+# Instinct Solar: 1-bit screen with a round subscreen. Fenix Solar: 64 colours.
+# Anything else is AMOLED.
+base.excludeAnnotations = mono;mip
+semioctagon.excludeAnnotations = color;amoled;mip
+round-260x260.excludeAnnotations = mono;amoled
+round-280x280.excludeAnnotations = mono;amoled
+# resources-<device>/ and resources-<family>/ are picked up automatically: icons
+# differ in size and colour. The two Fenix Solar sizes share one.
+round-260x260.resourcePath = $(round-260x260.resourcePath);resources-mip
+round-280x280.resourcePath = $(round-280x280.resourcePath);resources-mip

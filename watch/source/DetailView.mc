@@ -14,9 +14,10 @@ class DetailView extends WatchUi.View {
     (:color) private const TOP5 = 27;
     (:color) private const TOP7 = 55;
     (:color) private const BAR_Y = 7;
-    (:color) private const AGE_Y = 86;
+    (:color) private const AGE_Y = 82;
     (:color) private const AGE_LABEL = "updated ";
-    (:color) private const AGE_COLOR = Graphics.COLOR_DK_GRAY;
+    (:amoled) private const AGE_COLOR = Graphics.COLOR_DK_GRAY;
+    (:mip) private const AGE_COLOR = Graphics.COLOR_LT_GRAY;
 
     // The subscreen takes the top right, so the title and "5 hours" sit left of it.
     (:mono) private const MARGIN = 8;

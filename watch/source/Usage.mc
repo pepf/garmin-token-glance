@@ -7,9 +7,18 @@ import Toybox.Time;
 (:glance)
 module Usage {
 
-    const ORANGE = 0xD97757;
-    const RED = 0xFF4B3E;
-    const TRACK = 0x3A3A3A;
+    (:amoled) const ORANGE = 0xD97757;
+    (:amoled) const RED = 0xFF4B3E;
+    (:amoled) const TRACK = 0x3A3A3A;
+    (:amoled) const GRADIENT_STEPS = 8;
+
+    // 64-colour screens: exact palette colours, or orange and red round to the
+    // same one. Gradients turn into bands there, so a flat fill.
+    (:mip) const ORANGE = 0xFF5500;
+    (:mip) const RED = 0xFF0000;
+    (:mip) const TRACK = 0x555555;
+    (:mip) const GRADIENT_STEPS = 1;
+
     const FIVE_HOURS = 5 * 3600;
     const SEVEN_DAYS = 7 * 86400;
 
@@ -74,7 +83,7 @@ module Usage {
             // Subtle gradient like native glance bars: stacked bands, each
             // shorter and a little lighter, so the fill brightens toward its tip.
             var base = pct >= 90 ? RED : ORANGE;
-            var steps = 8;
+            var steps = GRADIENT_STEPS;
             for (var i = 0; i < steps; i++) {
                 var t = (steps - 1 - i) * 4;
                 var cr = (base >> 16) & 0xFF;

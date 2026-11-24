@@ -4,10 +4,33 @@ A Garmin glance that shows how much of your Claude subscription limits you have
 used: the 5-hour and 7-day percentage, time until reset, and a pace tick that
 tells you whether you are burning faster than the window allows.
 
-Built for a Venu 4 (41 mm and 45 mm) and an Instinct 3 Solar (45 mm and 50 mm),
-sideloaded, for personal use.
+Sideloaded, for personal use. See [Supported models](#supported-models).
 
 <img width="1000" alt="Garmin Token Glance Screenshots" src="https://github.com/user-attachments/assets/978e4981-b348-4916-a8fe-3265048450ce" />
+
+## Supported models
+
+| Watch | Sizes | Build (`<device>`) |
+|---|---|---|
+| Fenix 9 | 43 mm | `fenix943mm` |
+| Fenix 9 | 47, 51 mm | `fenix947mm` |
+| Fenix 9 Pro | 43 mm | `fenix9pro43mm` |
+| Fenix 9 Pro | 47 mm | `fenix9pro47mm` |
+| Fenix 9 Pro | 51 mm | `fenix9pro51mm` |
+| Fenix 9 Pro Solar | 47 mm | `fenix9prosolar47mm` |
+| Fenix 9 Pro Solar | 51 mm | `fenix9prosolar51mm` |
+| Fenix 8 | 43 mm | `fenix843mm` |
+| Fenix 8, tactix 8, quatix 8 | 47, 51 mm | `fenix847mm` |
+| Fenix 8 Pro, Fenix 8 MicroLED, quatix 8 Pro | 47, 51 mm | `fenix8pro47mm` |
+| Fenix 8 Solar | 47 mm | `fenix8solar47mm` |
+| Fenix 8 Solar, tactix 8 Solar | 51 mm | `fenix8solar51mm` |
+| Venu 4 | 41 mm | `venu441mm` |
+| Venu 4, D2 Air X15 | 45 mm | `venu445mm` |
+| Instinct 3 Solar, Solar Tactical | 45, 50 mm | `instinct3solar45mm` |
+
+Each build was checked in the Connect IQ simulator (glance and detail page). The
+Fenix and Instinct builds have not been tried on a real watch.
+For any other model, see step 7 of [instructions.md](instructions.md).
 
 ## How it works
 
@@ -96,8 +119,8 @@ Connect are not available for sideloaded apps, so the relay host and token are
 compiled in from `watch/resources/properties/properties.xml` (gitignored).
 
 1. Build: `./watch/build.sh` produces `watch/bin/claude-usage-<device>.prg` for
-   `venu441mm`, `venu445mm` and `instinct3solar45mm` (also the 50 mm). Pick the
-   one for your watch.
+   every device under [Supported models](#supported-models). Pick the one for
+   your watch.
 2. Connect the watch to your computer with its USB cable.
    - macOS: Garmin watches use MTP, so they do not show up in Finder. Use
      [OpenMTP](https://openmtp.ganeshrvel.com/) (free) to browse the watch.
