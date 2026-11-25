@@ -2,7 +2,8 @@
 
 A Garmin glance that shows how much of your Claude subscription limits you have
 used: the 5-hour and 7-day percentage, time until reset, and a pace tick that
-tells you whether you are burning faster than the window allows.
+tells you whether you are burning faster than the window allows. Open it for
+the details, and swipe on for a bit of advice in words.
 
 Sideloaded, for personal use. See [Supported models](#supported-models).
 
@@ -100,7 +101,7 @@ drops it, `/poll` returns 500 and the watch keeps showing the last data.
 | Path | What |
 |---|---|
 | `relay/` | Cloud Function (`index.js`, ~70 lines) and `deploy.sh` |
-| `watch/` | Connect IQ app in Monkey C (glance, detail page, background fetch) |
+| `watch/` | Connect IQ app in Monkey C (glance, detail and summary pages, background fetch) |
 | `env.example` | Template for `~/.claude/token-glance/env`, which holds all secrets |
 | `SPEC.md` | Design notes and decisions |
 | `instructions.md` | Step-by-step setup, written for you or a coding agent |

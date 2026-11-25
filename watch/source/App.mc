@@ -26,10 +26,11 @@ class App extends Application.AppBase {
         return [new GlanceView()];
     }
 
-    //! DetailView is foreground-only.
+    //! Pages is foreground-only.
     (:typecheck([disableBackgroundCheck, disableGlanceCheck]))
     function getInitialView() as [WatchUi.Views] or [WatchUi.Views, WatchUi.InputDelegates] {
-        return [new DetailView()];
+        var loop = new WatchUi.ViewLoop(new Pages(), { :wrap => true });
+        return [loop, new WatchUi.ViewLoopDelegate(loop)];
     }
 
     //! Fetch is (:background), so absent from the glance binary.

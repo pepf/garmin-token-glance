@@ -16,7 +16,7 @@ and starts from the data source.
 | Metric | Subscription limit usage: 5-hour and 7-day percentage plus reset time. No cost, no token counts. |
 | Audience | Me. Keep two seams for a store release (below), build nothing else for it. |
 | Backend | One small function in the existing `token-glance` GCP project. |
-| Tap-through | One static detail page. Timeline chart is a later feature. |
+| Tap-through | Two pages: the numbers, then a summary in words. Timeline chart is a later feature. |
 
 ## How it works
 
@@ -107,7 +107,10 @@ same entry, and the bar gradient turns into bands.
 | `Fetch.mc` | Background delegate. One `makeWebRequest`, one `Background.exit()` with the payload, on every path. |
 | `GlanceView.mc` | Draws the glance from `Storage["snap"]`. |
 | `GlanceViewMono.mc` | The same glance for the Instinct, kept left of the subscreen. |
+| `Pages.mc` | The two pages behind the glance, for the system `ViewLoop`. |
 | `DetailView.mc` | Draws the detail page from `Storage["snap"]`. |
+| `SummaryView.mc` | Draws the summary page: headline and advice. |
+| `Coach.mc` | Picks the headline and phrase from `Storage["snap"]`. |
 
 Settings: `relayHost` and `token`, as app properties editable in Garmin
 Connect. `resources/properties/properties.xml` is gitignored and holds my real
@@ -158,7 +161,7 @@ or host) and `Waiting for data` (nothing fetched yet, or `204`).
 
 ### Detail page
 
-Static, no input handling beyond the default back behaviour.
+Static. Swipe or press up/down for the summary page.
 
 ```
         Claude
@@ -172,6 +175,20 @@ Static, no input handling beyond the default back behaviour.
 
      updated 3m ago
 ```
+
+### Summary page
+
+A headline and one casual line of advice, like the second page of native
+glances. `Coach.pick()` is a list of states, most urgent first; the first match
+wins. It looks at both percentages, how far each is from its pace tick, the time
+left, and whether it is night.
+
+- Each state has two or three phrases. The shown one changes every half hour.
+- Phrases can contain live values: time to reset, percentages, and for a window
+  over pace the time until it is used up at the current average rate.
+- The headline is red when a window is at 90 or above, like the bars.
+- Phrases must fit the Instinct: four lines, roughly 55 characters.
+- Needs both windows; otherwise it shows `Waiting for data`.
 
 ## Seams kept for later
 
