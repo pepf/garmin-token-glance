@@ -131,8 +131,9 @@ compiled in from `watch/resources/properties/properties.xml` (gitignored).
 5. Give it a few minutes: the first background fetch runs within 5 minutes of
    the app first starting, and needs the phone with Garmin Connect nearby.
 
-To update, copy the new `.prg` over the old one. To remove, delete it from
-`GARMIN/APPS/`.
+To update, copy the new `.prg` into `GARMIN/APPS/` and unplug. The old one is
+usually not listed there: newer watches move installed apps to hidden storage.
+To remove, use Garmin Express or the Connect IQ store on the watch.
 
 ## Security
 
